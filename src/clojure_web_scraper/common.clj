@@ -8,34 +8,40 @@
             [clojure.core.async :as async :refer [go go-loop put! take! <! >! <!! timeout chan alt! go]]))
 
 
+
+(defn find-text-error [text] (if (= (string/lower-case text) "error") (int -1) false))
+(defn find-text-flat  [text] (if (= (string/lower-case text) "flat")  (int 0) false))
+(defn find-one-number
+  [text]
+  (let [match (re-matches  #"\d+" text)]
+    (if match (Integer. match) false)))
+(defn find-range-number-return-latest
+  [text]
+  (let [match (re-matches #"\d+-(\d+)" text)]
+    (if match (Integer. (second match)) false)))
+(def find-checks [find-text-error find-text-flat find-one-number find-range-number-return-latest])
+
+
 (defn transform-text-number
   [text]
-
-  (if (= (string/lower-case text) "error")
-    (int -1)
-    (if (= (string/lower-case text) "flat")
-      (int 0)
-      (if (re-matches  #"\d+" text)
-        (Integer. text)
-        (if (re-matches #"\d+-(\d+)" text)
-          (Integer. (second (re-matches #"\d+-(\d+)" text)))
-          (int 0))))))
+  (loop [checks find-checks]
+    (let [check (first checks)]
+      (if (nil? check)
+        (int -1)
+        (if-let [result (check text)]
+          result
+          (recur (rest checks)))))))
 
 
-;; (defn hmac
-;;   "Calculate HMAC signature for given data."
-;;   [^String key ^String data]
-;;   (let [hmac-sha1 "HmacSHA256"
-;;         signing-key (SecretKeySpec. (.getBytes key) hmac-sha1)
-;;         mac (doto (Mac/getInstance hmac-sha1) (.init signing-key))]
-;;     (String. (org.apache.commons.codec.binary.Base64/encodeBase64
-;;               (.doFinal mac (.getBytes data)))
-;;              "UTF-8")))
+;; Mon07/11Tue08/11Wed09/11Thu10/11Fri11/11Sat12/11Sun13/11Mon14/11Tue15/11Wed16/11
+;; Flat 		1ft 		3-4ft     2-3ft       1-2ft       3-5ft           1-2 ft     1-2 ft       2ft 			1ft
 
+(defn splitMSWdate [dateString]
+  "It is going to split dates: $('#highcharts-0 svg > text').text() Mon07/11Tue08/11Wed09/11Thu10/11Fri11/11Sat12/11Sun13/11Mon14/11Tue15/11Wed16/11")
 
-;; (hmac "ciao" "123")
+(defn splitMSWsurfSize []
+  "It is going to split surf size:$('.highcharts-stack-labels text').text() Flat1ft3-4ft2-3ft1-2ft3-5ft1-2ft1-2ft2ft1ft")
 
-;; (http/get "dsadass" (fn [v] (println v))(fn [v] (println "daskljdasksda" v)))
 
 
 (defn http-get [url]
