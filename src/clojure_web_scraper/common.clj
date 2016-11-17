@@ -1,5 +1,4 @@
 (ns clojure-web-scraper.common
-
   (:import (javax.crypto Mac)
            (javax.crypto.spec SecretKeySpec))
   (:require [clojure.string :as string]
@@ -15,6 +14,7 @@
   [text]
   (let [match (re-matches  #"\d+" text)]
     (if match (Integer. match) false)))
+
 (defn find-range-number-return-latest
   [text]
   (let [match (re-matches #"\d+-(\d+)" text)]
@@ -31,17 +31,6 @@
         (if-let [result (check text)]
           result
           (recur (rest checks)))))))
-
-
-;; Mon07/11Tue08/11Wed09/11Thu10/11Fri11/11Sat12/11Sun13/11Mon14/11Tue15/11Wed16/11
-;; Flat 		1ft 		3-4ft     2-3ft       1-2ft       3-5ft           1-2 ft     1-2 ft       2ft 			1ft
-
-(defn splitMSWdate [dateString]
-  "It is going to split dates: $('#highcharts-0 svg > text').text() Mon07/11Tue08/11Wed09/11Thu10/11Fri11/11Sat12/11Sun13/11Mon14/11Tue15/11Wed16/11")
-
-(defn splitMSWsurfSize []
-  "It is going to split surf size:$('.highcharts-stack-labels text').text() Flat1ft3-4ft2-3ft1-2ft3-5ft1-2ft1-2ft2ft1ft")
-
 
 
 (defn http-get [url]

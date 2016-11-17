@@ -16,8 +16,6 @@
 (defn selector-get-waves-size-text [hickory-tree] (-> (s/select (s/class "rating-text") hickory-tree)
                                                       first :content first string/trim))
 
-(:key (first surfing-urls))
-
 (defn parse-response
   [response]
   (let [{:keys [body error]} response]
@@ -41,3 +39,4 @@
             (println "error for:" url-key))))))
 
 (call-all-the-urls-optn)
+
