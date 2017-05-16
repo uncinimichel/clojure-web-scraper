@@ -1,1 +1,12 @@
-[{"surfLocation":"west-wittering","url":"https://www.windguru.cz/1825"},{"surfLocation":"east-wittering","url":"https://www.windguru.cz/47908"},{"surfLocation":"cornwall-st-ives","url":"https://www.windguru.cz/47874"}]
+[
+  {"surfLocation":"ukwest-wittering","url":"https://www.windguru.cz/1825"},
+  {"surfLocation":"uk-east-wittering","url":"https://www.windguru.cz/47908"},
+  {"surfLocation":"uk-waymouth","url":"https://www.windguru.cz/133"},
+  {"surfLocation":"uk-lancing","url":"https://www.windguru.cz/219322"},
+  {"surfLocation":"uk-sennen-cove","url":"https://www.windguru.cz/47875"},
+  {"surfLocation":"uk-polzeath","url":"https://www.windguru.cz/136"},
+  {"surfLocation":"uk-watergater ","url":"https://www.windguru.cz/136"},
+  {"surfLocation":"uk-cornwall-st-ives","url":"https://www.windguru.cz/47874"},
+  {"surfLocation":"spain-san-sebastian","url":"https://www.windguru.cz/5199"},
+  {"surfLocation":"spain-bilbao-sopelana","url":"https://www.windguru.cz/48690"}
+]
