@@ -54,21 +54,30 @@
       json/read-str
       (#(get-in % ["fcst" "3"]))))
 
+(defn read-json
+  [json]
+  (json/read-str))
+
 (defn create-date-and-return-as-string
-  [y m d h]
-  (f/unparse common/custom-formatter (t/date-time y m d h)))
+  [date d h]
+  (let [real-data (t/plus date (t/days d))]
+    ; I am doing this to set the h.... after summing the day. this is because
+    ; I don't want to sum the h
+    (f/unparse common/custom-formatter (t/date-time  (t/year real-data)
+                                                     (t/month real-data)
+                                                     (t/day real-data)
+                                                     h))))
 
 (defn surf-date-shape
   [data]
-  (let [{initdate "initdate"
+  (let [{init-date "initdate"
          raw-ds "hr_d"
          raw-hs "hr_h"} data]
-    (let [date (f/parse initdate)
-          y (t/year date)
-          m (t/month date)
-          partial-date (partial create-date-and-return-as-string y m)]
-      (map #(partial-date (common/parse-int %1) (common/parse-int %2))
-           raw-ds
+    (let [date (f/parse init-date)
+          counted-days (common/map-to-integer raw-ds)
+          partial-date (partial create-date-and-return-as-string date)]
+      (map #(partial-date %1 (common/parse-int %2))
+           counted-days
            raw-hs))))
 
 (defn surf-waves-shape
@@ -126,8 +135,15 @@
         (.putObject s3-client "com.surfing" "next/surf.json" (json/write-str surf-data)))))
 
 ; test pipeline:
-(time (-handleRequest nil "sns-event.json" "outfile.json" nil))
+; (time (-handleRequest nil "sns-event.json" "outfile.json" nil))
 
+; (def read-in
+;   (-> "raw-data-example.json"
+;       io/resource
+;       io/file
+;       slurp
+;       json/read-str
+;       (#(get-in % ["fcst" "3"]))))
 
 ; aws sns publish \
 ;     --topic-arn arn:aws:sns:eu-west-1: \
@@ -143,5 +159,8 @@
 ;       json/read-str
 ;       to-chan))
 ;
+; (surf-date-shape read-in)
+; (def d (get-in read-in ["hr_d"]))
+
 ; (get-in (first (second (<!! read-in))) ["Sns" "Message"]))))
 ;

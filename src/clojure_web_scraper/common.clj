@@ -15,3 +15,21 @@
     (println "Calling this url:" url)
     (http/get url (fn [r] (put! c r)))
     c))
+
+(defn map-to-integer [col]
+  (loop [acc []
+         c col
+         old-value nil
+         current-index -1]
+    (if (empty? c)
+      acc
+      (let [v (first c)]
+        (if (= v old-value)
+          (recur (conj acc current-index)
+                 (rest c)
+                 v
+                 current-index)
+          (recur (conj acc (inc current-index))
+                 (rest c)
+                 v
+                 (inc current-index)))))))
